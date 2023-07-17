@@ -1,0 +1,2 @@
+# OCR
+An OCR app
