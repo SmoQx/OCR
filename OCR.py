@@ -1,6 +1,6 @@
 import pytesseract
 from PIL import Image
-from fpdf import FPDF
+
 
 img_file = "new_file_to_ocr.png"
 img_file2 = 'File_to_ocr.png'

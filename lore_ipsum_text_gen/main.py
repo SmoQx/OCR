@@ -38,11 +38,11 @@ def convert_text_to_png(input_file, output_file, font_size):
     text_width, text_height = temp_draw.textbbox((0, 0), text, font=font)[2:]
 
     # Create a new image with white background
-    image = Image.new('RGB', (text_width + 20, text_height + 20), color=(255, 255, 255))
+    image = Image.new('RGB', (text_width + 100, text_height + 80), color=(255, 255, 255))
     draw = ImageDraw.Draw(image)
 
     # Render text onto the image
-    draw.text((10, 10), text, font=font, fill=(0, 0, 0))
+    draw.text((50, 50), text, font=font, fill=(0, 0, 0))
 
     # Save the image as a PNG file
     image.save(output_file, 'PNG')
@@ -51,14 +51,15 @@ def convert_text_to_png(input_file, output_file, font_size):
 
 # Press the green button in the gutter to run the script.
 if __name__ == '__main__':
-    with open('lore_ipsum.txt', 'w') as save_lore_text:
-        save_lore_text.write(gen_random_page())
+    for x in range(10):
+        with open('lore_ipsum.txt', 'w') as save_lore_text:
+            save_lore_text.write(gen_random_page())
 
-    input_filename = "lore_ipsum.txt"
-    output_filename = "lore_ipsum2.png"
-    font_size = 14
+        input_filename = "lore_ipsum.txt"
+        output_filename = f"lore_ipsum{x}.png"
+        font_size = 14
 
-    convert_text_to_png(input_filename, output_filename, font_size)
+        convert_text_to_png(input_filename, output_filename, font_size)
     """font_path = "/usr/share/fonts/truetype/liberation/LiberationSans-Regular.ttf"  # Replace with the actual path to your font file
     font = ImageFont.truetype(font_path, font_size)
     print(font.font_variant())"""

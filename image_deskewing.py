@@ -1,7 +1,9 @@
+import os
+
 import cv2
 import matplotlib.pyplot
 
-from img_preperation import display
+# from img_preperation import display
 
 
 # Calculate skew angle of an image
@@ -39,7 +41,7 @@ def rotateImage(cvImage, angle: float):
     (h, w) = newImage.shape[:2]
     center = (w // 2, h // 2)
     M = cv2.getRotationMatrix2D(center, angle, 1.0)
-    newImage = cv2.warpAffine(newImage, M, (w, h), flags=cv2.INTER_CUBIC, borderMode=cv2.BORDER_REPLICATE)
+    newImage = cv2.warpAffine(newImage, M, (h, w), flags=cv2.INTER_CUBIC, borderMode=cv2.BORDER_REPLICATE)
     return newImage
 
 
@@ -50,10 +52,17 @@ def deskew(cvImage):
 
 
 if __name__ == '__main__':
-    rotated_image = 'rotated_img.png'
-    print(get_skew_angle(rotated_image))
-    fixed_image = deskew(rotated_image)
-    display(rotated_image)
-    fixed_image = cv2.rotate(fixed_image, cv2.ROTATE_90_CLOCKWISE)
+    many = 0
+    if many == 1:
+        for x in os.listdir("lore_ipsum_skewed"):
+            if x.endswith(".png"):
+                rotated_image = f"lore_ipsum_skewed/{x}"
+                print(get_skew_angle(rotated_image))
+                fixed_image = deskew(rotated_image)
+                # display(rotated_image)
+                fixed_image = cv2.rotate(fixed_image, cv2.ROTATE_90_CLOCKWISE)
 
-    cv2.imwrite('fixed_the_skew.png', fixed_image)
+                cv2.imwrite(f'fixed_lore_ipsum/{x}', fixed_image)
+    else:
+        rotated_im = 'lore_ipsum_skewed/lore_ipsum_skewed1.png'
+        get_skew_angle(rotated_im)
