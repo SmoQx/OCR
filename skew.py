@@ -1,15 +1,37 @@
 import cv2
 import random
 import os
+import matplotlib.pyplot as plt
+import numpy as np
 
 
-def skew_image(cvImage, angle: float):
-    newImage = cv2.imread(cvImage)
-    (h, w) = newImage.shape[:2]
-    center = (w // 2, h // 2)
-    M = cv2.getRotationMatrix2D(center, angle, 1.0)
-    newImage = cv2.warpAffine(newImage, M, (w+50, h+50), flags=cv2.INTER_CUBIC, borderMode=cv2.BORDER_REPLICATE)
-    return newImage
+def skew_image(image_path, angle: float):
+    # Load the image using OpenCV
+    img = cv2.imread(image_path)
+
+    # Get the image's height and width
+    height, width = img.shape[:2]
+
+    # Calculate the rotation center
+    center = (width // 2, height // 2)
+
+    # Get the rotation matrix using cv2.getRotationMatrix2D
+    rotation_matrix = cv2.getRotationMatrix2D(center, angle, 1.0)
+
+    # Calculate the bounding box of the rotated image
+    cos_angle = np.abs(rotation_matrix[0, 0])
+    sin_angle = np.abs(rotation_matrix[0, 1])
+    new_width = int((height * sin_angle) + (width * cos_angle))
+    new_height = int((height * cos_angle) + (width * sin_angle))
+
+    # Adjust the rotation matrix to take into account the new size
+    rotation_matrix[0, 2] += (new_width / 2) - center[0]
+    rotation_matrix[1, 2] += (new_height / 2) - center[1]
+
+    # Perform the rotation using cv2.warpAffine
+    rotated_img = cv2.warpAffine(img, rotation_matrix, (new_width, new_height), flags=cv2.INTER_CUBIC, borderMode=cv2.BORDER_REPLICATE)
+
+    return rotated_img
 
 
 if __name__ == '__main__':

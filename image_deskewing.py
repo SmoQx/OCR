@@ -1,5 +1,5 @@
 import os
-
+import numpy as np
 import cv2
 import matplotlib.pyplot
 
@@ -37,12 +37,32 @@ def get_skew_angle(cvImage) -> float:
 
 # Rotate the image around its center
 def rotateImage(cvImage, angle: float):
-    newImage = cv2.imread(cvImage)
-    (h, w) = newImage.shape[:2]
-    center = (w // 2, h // 2)
-    M = cv2.getRotationMatrix2D(center, angle, 1.0)
-    newImage = cv2.warpAffine(newImage, M, (h, w), flags=cv2.INTER_CUBIC, borderMode=cv2.BORDER_REPLICATE)
-    return newImage
+    img = cv2.imread(cvImage)
+
+    # Get the image's height and width
+    height, width = img.shape[:2]
+
+    # Calculate the rotation center
+    center = (width // 2, height // 2)
+
+    # Get the rotation matrix using cv2.getRotationMatrix2D
+    rotation_matrix = cv2.getRotationMatrix2D(center, angle, 1.0)
+
+    # Calculate the bounding box of the rotated image
+    cos_angle = np.abs(rotation_matrix[0, 0])
+    sin_angle = np.abs(rotation_matrix[0, 1])
+    new_width = int((height * sin_angle) + (width * cos_angle))
+    new_height = int((height * cos_angle) + (width * sin_angle))
+
+    # Adjust the rotation matrix to take into account the new size
+    rotation_matrix[0, 2] += (new_width / 2) - center[0]
+    rotation_matrix[1, 2] += (new_height / 2) - center[1]
+
+    # Perform the rotation using cv2.warpAffine
+    rotated_img = cv2.warpAffine(img, rotation_matrix, (new_width, new_height), flags=cv2.INTER_CUBIC,
+                                 borderMode=cv2.BORDER_REPLICATE)
+
+    return rotated_img
 
 
 # Deskew image
@@ -52,7 +72,8 @@ def deskew(cvImage):
 
 
 if __name__ == '__main__':
-    many = 0
+
+    many = 1
     if many == 1:
         for x in os.listdir("lore_ipsum_skewed"):
             if x.endswith(".png"):
@@ -63,6 +84,11 @@ if __name__ == '__main__':
                 fixed_image = cv2.rotate(fixed_image, cv2.ROTATE_90_CLOCKWISE)
 
                 cv2.imwrite(f'fixed_lore_ipsum/{x}', fixed_image)
+    elif many == 2:
+        for x in os.listdir("lore_ipsum_skewed"):
+            if x.endswith(".png"):
+                rotated_image = f"lore_ipsum_skewed/{x}"
+                print(get_skew_angle(rotated_image))
     else:
-        rotated_im = 'lore_ipsum_skewed/lore_ipsum_skewed1.png'
-        get_skew_angle(rotated_im)
+        rotated_im = 'lore_ipsum_skewed/skew_lore_ipsum1.png'
+        print(get_skew_angle(rotated_im))
