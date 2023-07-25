@@ -1,7 +1,7 @@
 import os
 import numpy as np
 import cv2
-import matplotlib.pyplot
+import matplotlib.pyplot as plt
 
 # from img_preperation import display
 
@@ -71,9 +71,7 @@ def deskew(cvImage):
     return rotateImage(cvImage, -1.0 * angle)
 
 
-if __name__ == '__main__':
-
-    many = 1
+def runt_test(many):
     if many == 1:
         for x in os.listdir("lore_ipsum_skewed"):
             if x.endswith(".png"):
@@ -92,3 +90,25 @@ if __name__ == '__main__':
     else:
         rotated_im = 'lore_ipsum_skewed/skew_lore_ipsum1.png'
         print(get_skew_angle(rotated_im))
+
+
+def run_deskew_again():
+    for x in os.listdir("fixed_lore_ipsum"):
+        if x.endswith(".png"):
+            angle = get_skew_angle(f"fixed_lore_ipsum/{x}")
+            print(get_skew_angle(f"fixed_lore_ipsum/{x}"), end=" ")
+            print(x)
+
+            image = rotateImage(f"fixed_lore_ipsum/{x}", angle=(angle * -1.0))
+            image = cv2.rotate(image, cv2.ROTATE_90_CLOCKWISE)
+            cv2.imwrite(f"fixed_lore_ipsum/{x}", image)
+
+
+if __name__ == '__main__':
+
+
+    # runt_test(many=1)
+    run_deskew_again()
+
+    iamge = cv2.imread(f"fixed_lore_ipsum/skew_lore_ipsum0.png")
+

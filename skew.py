@@ -40,6 +40,7 @@ if __name__ == '__main__':
         if x.endswith(".png"):
             print(x)
             skew_angle = random.uniform(1.0, 20.0)
+            print(skew_angle)
             image_path_to_skew = f'lore_ipsum_text_gen/{x}'
             rotated_image = skew_image(image_path_to_skew, skew_angle)
             cv2.imwrite(f'lore_ipsum_skewed/skew_{x}', rotated_image)
