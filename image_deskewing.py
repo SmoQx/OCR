@@ -24,15 +24,33 @@ def get_skew_angle(cvImage) -> float:
     contours, hierarchy = cv2.findContours(dilate, cv2.RETR_LIST, cv2.CHAIN_APPROX_SIMPLE)
     contours = sorted(contours, key=cv2.contourArea, reverse=True)
 
-    # Find the largest contour and surround in min area box
-    largestContour = contours[0]
-    minAreaRect = cv2.minAreaRect(largestContour)
+    angles = []
 
-    # Determine the angle. Convert it to the value that was originally used to obtain skewed image
-    angle = minAreaRect[-1]
-    if angle < -45:
-        angle = 90 + angle
-    return -1.0 * angle
+    # Loop through each contour and find the angle of the bounding box
+    for contour in contours:
+        minAreaRect = cv2.minAreaRect(contour)
+
+        # Determine the angle. Convert it to the value that was originally used to obtain the skewed image
+        angle = minAreaRect[-1]
+        if angle < -45:
+            angle = 90 + angle
+
+        angles.append(-1.0 * angle)
+
+    # Gets a mean value of angle from detected boxes
+    one_angle = 0
+    subtract_if_0 = 0
+    print("List of angles ", angles[:])
+    for one_angle in angles:
+        if one_angle == 0 or one_angle == 0.0:
+            subtract_if_0 += 1
+
+    sum_of_angles = sum(angles)
+    print("Sum of angles", sum_of_angles)
+    print("lenght of list ", len(angles), "and the number to subtract", subtract_if_0)
+    ang_to_return = sum_of_angles / (len(angles) - subtract_if_0)
+    print("after devision", ang_to_return)
+    return ang_to_return
 
 
 # Rotate the image around its center
@@ -76,7 +94,7 @@ def runt_test(many):
         for x in os.listdir("lore_ipsum_skewed"):
             if x.endswith(".png"):
                 rotated_image = f"lore_ipsum_skewed/{x}"
-                print(get_skew_angle(rotated_image))
+                #print(get_skew_angle(rotated_image))
                 fixed_image = deskew(rotated_image)
                 # display(rotated_image)
                 fixed_image = cv2.rotate(fixed_image, cv2.ROTATE_90_CLOCKWISE)
@@ -107,8 +125,8 @@ def run_deskew_again():
 if __name__ == '__main__':
 
 
-    # runt_test(many=1)
-    run_deskew_again()
+    runt_test(many=1)
+    #run_deskew_again()
 
-    iamge = cv2.imread(f"fixed_lore_ipsum/skew_lore_ipsum0.png")
-
+    image = cv2.imread("fixed_lore_ipsum/skew_lore_ipsum0.png")
+    im_str = "lore_ipsum_skewed/skew_lore_ipsum4.png"
