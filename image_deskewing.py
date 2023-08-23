@@ -85,7 +85,8 @@ def rotateImage(cvImage, angle: float):
 
 # Deskew image
 def deskew(cvImage):
-    angle = get_skew_angle(cvImage)
+    #angle = get_skew_angle(cvImage)
+    angle = 7
     return rotateImage(cvImage, -1.0 * angle)
 
 
@@ -125,8 +126,11 @@ def run_deskew_again():
 if __name__ == '__main__':
 
 
-    runt_test(many=1)
+    #runt_test(many=1)
     #run_deskew_again()
 
     image = cv2.imread("fixed_lore_ipsum/skew_lore_ipsum0.png")
     im_str = "lore_ipsum_skewed/skew_lore_ipsum4.png"
+    im_read = 'rotated_img.png'
+    get_skew_angle(im_read)
+    cv2.imwrite("test_new_deskew.png", deskew(im_read))

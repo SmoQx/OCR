@@ -14,8 +14,9 @@ ocr_result2 = pytesseract.image_to_string(img_file3, lang="pol")
 
 
 if __name__ == '__main__':
-    print(ocr_result)
+    """print(ocr_result)
     with open('ocr_topdf.pdf', 'wb') as file:
         file.write(ocr_result)
     with open('ocr_to_txt.txt', "w") as file2:
-        file2.write(ocr_result2)
+        file2.write(ocr_result2)"""
+    pytesseract.
