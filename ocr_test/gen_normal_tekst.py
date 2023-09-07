@@ -59,4 +59,4 @@ def convert_text_to_png(input_file, output_file, font_size):
 if __name__ == '__main__':
     path_to_outputfile = Path("./temp/random.png")
     print(gen_random_page(10, 20))
-    convert_text_to_png(gen_random_page(10, 20), path_to_outputfile, 30)
+    convert_text_to_png(gen_random_page(10, 20), path_to_outputfile, 20)
