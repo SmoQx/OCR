@@ -1,6 +1,8 @@
 import random
 from faker import Faker
 from PIL import ImageDraw, ImageFont, Image
+import os
+from pathlib import Path
 
 
 def rand_word_gen(how_many=1):
@@ -24,9 +26,12 @@ def gen_random_page(word_min: int = 1, word_max: int = 2):
 
 
 def convert_text_to_png(input_file, output_file, font_size):
-    # Read text from input file
-    with open(input_file, 'r') as file:
-        text = file.read()
+    if os.path.exists(input_file):
+        # Read text from input file
+        with open(input_file, 'r') as file:
+            text = file.read()
+    else:
+        text = input_file
 
 
     font_path = "/usr/share/fonts/truetype/liberation/LiberationSans-Regular.ttf"  # Replace with the actual path to your font file
@@ -52,5 +57,6 @@ def convert_text_to_png(input_file, output_file, font_size):
 
 
 if __name__ == '__main__':
-
+    path_to_outputfile = Path("./temp/random.png")
     print(gen_random_page(10, 20))
+    convert_text_to_png(gen_random_page(10, 20), path_to_outputfile, 30)
