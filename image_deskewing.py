@@ -49,8 +49,10 @@ def get_skew_angle(cvImage) -> float:
     print("Sum of angles", sum_of_angles)
     print("lenght of list ", len(angles), "and the number to subtract", subtract_if_0)
     ang_to_return = sum_of_angles / (len(angles) - subtract_if_0)
-    print("after devision", ang_to_return)
-    return ang_to_return
+    print("after devision", ang_to_return + 90)
+    angles.sort()
+    print(angles[0])
+    return ang_to_return + 90
 
 
 # Rotate the image around its center
@@ -85,8 +87,7 @@ def rotateImage(cvImage, angle: float):
 
 # Deskew image
 def deskew(cvImage):
-    #angle = get_skew_angle(cvImage)
-    angle = 7
+    angle = get_skew_angle(cvImage)
     return rotateImage(cvImage, -1.0 * angle)
 
 
@@ -133,4 +134,4 @@ if __name__ == '__main__':
     im_str = "lore_ipsum_skewed/skew_lore_ipsum4.png"
     im_read = 'rotated_img.png'
     get_skew_angle(im_read)
-    cv2.imwrite("test_new_deskew.png", deskew(im_read))
+    cv2.imwrite("test_new_deskew.png", deskew(im_str))

@@ -19,4 +19,3 @@ if __name__ == '__main__':
         file.write(ocr_result)
     with open('ocr_to_txt.txt', "w") as file2:
         file2.write(ocr_result2)"""
-    pytesseract.
